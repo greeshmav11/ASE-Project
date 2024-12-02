@@ -1,9 +1,10 @@
 
+import os
 currentWorkingDirectory = os.getcwd()
 #currentWorkingDirectory = "/mount/src/berlingeoheatmap1/"
 
 # -----------------------------------------------------------------------------
-import os
+
 os.chdir(currentWorkingDirectory)
 print("Current working directory\n" + os.getcwd())
 
