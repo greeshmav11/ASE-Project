@@ -1,5 +1,5 @@
 
-currentWorkingDirectory = r"C:\Users\HP\Desktop\Advanced_SE\ASE project\berlingeoheatmap_project1-main"
+currentWorkingDirectory = os.getcwd()
 #currentWorkingDirectory = "/mount/src/berlingeoheatmap1/"
 
 # -----------------------------------------------------------------------------
