@@ -11,17 +11,33 @@ from branca.colormap import LinearColormap
 
 
 def sort_by_plz_add_geometry(dfr, dfg, pdict): 
+    """
+    Sorts the input dataframe by postal code (PLZ), merges it with geospatial data, and returns a GeoDataFrame.
+
+    Parameters:
+        dfr (DataFrame): The input dataframe containing postal code and other relevant data.
+        dfg (GeoDataFrame): The geospatial dataframe containing geometries for postal codes.
+        pdict (dict): Dictionary containing mapping of columns, including geocode information.
+
+    Returns:
+        GeoDataFrame: A geospatial dataframe with the merged data, including geometry.
+    """
+
     dframe                  = dfr.copy()
     df_geo                  = dfg.copy()
     
+    # Sort the dataframe `dfr` by postal code (PLZ).
     sorted_df               = dframe\
         .sort_values(by='PLZ')\
         .reset_index(drop=True)\
         .sort_index()
-        
+    
+    # Merge the sorted dataframe with a geospatial dataframe `dfg` on a geocode column in `pdict`.   
+     
     sorted_df2              = sorted_df.merge(df_geo, on=pdict["geocode"], how ='left')
     sorted_df3              = sorted_df2.dropna(subset=['geometry'])
-    
+
+    # Converts the 'geometry' column to a GeoSeries and returns a GeoDataFrame.
     sorted_df3['geometry']  = gpd.GeoSeries.from_wkt(sorted_df3['geometry'])
     ret                     = gpd.GeoDataFrame(sorted_df3, geometry='geometry')
     
@@ -30,7 +46,21 @@ def sort_by_plz_add_geometry(dfr, dfg, pdict):
 # -----------------------------------------------------------------------------
 @ht.timer
 def preprop_lstat(dfr, dfg, pdict):
-    """Preprocessing dataframe from Ladesaeulenregister.csv"""
+    """
+    Preprocesses the electric charging station data from the Ladesaeulenregister.csv file.
+    
+    This function filters data to only include charging stations in Berlin and within specified postal codes
+    and returns a GeoDataFrame containing charging station data with geometry.
+
+    Parameters:
+        dfr (DataFrame): DataFrame containing the electric charging station data.
+        dfg (GeoDataFrame): Geospatial dataframe containing the postal code geometries.
+        pdict (dict): Dictionary containing mappings and other parameters, including geocode information.
+
+    Returns:
+        GeoDataFrame: A GeoDataFrame with the charging stations, including geometries.
+    """
+
     dframe                  = dfr.copy()
     df_geo                  = dfg.copy()
     
@@ -57,7 +87,18 @@ def preprop_lstat(dfr, dfg, pdict):
 # -----------------------------------------------------------------------------
 @ht.timer
 def count_plz_occurrences(df_lstat2):
-    """Counts loading stations per PLZ"""
+    """
+    Counts the number of charging stations per postal code (PLZ).
+    
+    This function groups the charging station data by postal code and counts the occurrences of each postal code.
+
+    Parameters:
+        df_lstat2 (GeoDataFrame): The input GeoDataFrame containing charging station data.
+
+    Returns:
+        DataFrame: A DataFrame with the count of charging stations per postal code, including geometry.
+    """
+
     # Group by PLZ and count occurrences, keeping geometry
     result_df = df_lstat2.groupby('PLZ').agg(
         Number=('PLZ', 'count'),
@@ -110,7 +151,20 @@ def count_plz_occurrences(df_lstat2):
 # -----------------------------------------------------------------------------
 @ht.timer
 def preprop_resid(dfr, dfg, pdict):
-    """Preprocessing dataframe from plz_einwohner.csv"""
+    """ Preprocesses the resident data from the plz_einwohner.csv file.
+    
+    This function filters data to include only postal codes in Berlin and within the specified range.
+    returns a GeoDataFrame containing resident data with geometry.
+
+    Parameters:
+        dfr (DataFrame): DataFrame containing resident data.
+        dfg (GeoDataFrame): Geospatial dataframe containing the postal code geometries.
+        pdict (dict): Dictionary containing mappings and other parameters, including geocode information.
+
+    Returns:
+        GeoDataFrame: A GeoDataFrame with resident data, including geometries.
+        """
+    
     dframe                  = dfr.copy()
     df_geo                  = dfg.copy()    
     
@@ -137,7 +191,19 @@ def preprop_resid(dfr, dfg, pdict):
 # -----------------------------------------------------------------------------
 @ht.timer
 def make_streamlit_electric_Charging_resid(dfr1, dfr2):
-    """Makes Streamlit App with Heatmap of Electric Charging Stations and Residents"""
+    """Creates a Streamlit app to visualize heatmaps of electric charging stations and resident distribution.
+
+    This function uses Folium to display a map with color-coded polygons representing the number of residents
+    or the number of electric charging stations per postal code. Users can toggle between layers to view either
+    residents or charging stations.
+
+    Parameters:
+        dfr1 (GeoDataFrame): A GeoDataFrame containing the charging station data with geometries.
+        dfr2 (GeoDataFrame): A GeoDataFrame containing the resident data with geometries.
+
+    Returns:
+        None (Displays a Streamlit app with the map visualization).
+    """
     
     dframe1 = dfr1.copy()
     dframe2 = dfr2.copy()
@@ -202,12 +268,3 @@ def make_streamlit_electric_Charging_resid(dfr1, dfr2):
     color_map.add_to(m)
     
     folium_static(m, width=800, height=600)
-    
-    
-
-
-
-
-
-
-
