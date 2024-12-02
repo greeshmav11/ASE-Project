@@ -12,15 +12,19 @@ from branca.colormap import LinearColormap
 
 def sort_by_plz_add_geometry(dfr, dfg, pdict): 
     """
-    Sorts the input dataframe by postal code (PLZ), merges it with geospatial data, and returns a GeoDataFrame.
-
-    Parameters:
-        dfr (DataFrame): The input dataframe containing postal code and other relevant data.
-        dfg (GeoDataFrame): The geospatial dataframe containing geometries for postal codes.
-        pdict (dict): Dictionary containing mapping of columns, including geocode information.
-
-    Returns:
-        GeoDataFrame: A geospatial dataframe with the merged data, including geometry.
+    The function `sort_by_plz_add_geometry` sorts an input dataframe by postal code, merges it with
+    geospatial data based on a specified geocode column, and returns a GeoDataFrame with geometry
+    information.
+    
+    :param dfr: The `dfr` parameter is the input DataFrame containing postal code and other relevant
+    data
+    :param dfg: The `dfg` parameter in the `sort_by_plz_add_geometry` function refers to a GeoDataFrame
+    containing geometries for postal codes. This GeoDataFrame likely includes spatial information such
+    as polygons or points representing the geographic locations corresponding to postal codes
+    :param pdict: The `pdict` parameter is a dictionary containing mapping of columns, including geocode
+    information. It likely includes information on how to match columns between the input dataframe
+    `dfr` and the geospatial dataframe `dfg` for merging based on a common geocode column
+    :return: A geospatial dataframe with the merged data, including geometry, is being returned.
     """
 
     dframe                  = dfr.copy()
@@ -47,18 +51,23 @@ def sort_by_plz_add_geometry(dfr, dfg, pdict):
 @ht.timer
 def preprop_lstat(dfr, dfg, pdict):
     """
-    Preprocesses the electric charging station data from the Ladesaeulenregister.csv file.
+    The function preprop_lstat preprocesses electric charging station data from a CSV file, filtering
+    for stations in Berlin within specified postal codes and returning a GeoDataFrame with geometries.
     
-    This function filters data to only include charging stations in Berlin and within specified postal codes
-    and returns a GeoDataFrame containing charging station data with geometry.
-
-    Parameters:
-        dfr (DataFrame): DataFrame containing the electric charging station data.
-        dfg (GeoDataFrame): Geospatial dataframe containing the postal code geometries.
-        pdict (dict): Dictionary containing mappings and other parameters, including geocode information.
-
-    Returns:
-        GeoDataFrame: A GeoDataFrame with the charging stations, including geometries.
+    :param dfr: The `dfr` parameter in the `preprop_lstat` function is a DataFrame containing the
+    electric charging station data. It likely includes information such as postal codes, states,
+    latitude, longitude, and charging station power ratings. The function preprocesses this data by
+    filtering for charging stations in Berlin within
+    :param dfg: The parameter `dfg` in the `preprop_lstat` function is a GeoDataFrame that contains
+    postal code geometries. This GeoDataFrame likely includes spatial information such as polygons or
+    points representing the boundaries or locations of postal code areas in a geographic area, such as
+    Berlin in this case
+    :param pdict: The `pdict` parameter in the `preprop_lstat` function is a dictionary containing
+    mappings and other parameters, including geocode information. It likely holds key-value pairs that
+    are used within the function for processing the electric charging station data. If you provide the
+    contents of the `pdict`
+    :return: A GeoDataFrame with the charging stations data for Berlin within specified postal codes,
+    including geometries, is being returned.
     """
 
     dframe                  = dfr.copy()
@@ -88,15 +97,15 @@ def preprop_lstat(dfr, dfg, pdict):
 @ht.timer
 def count_plz_occurrences(df_lstat2):
     """
-    Counts the number of charging stations per postal code (PLZ).
+    The function `count_plz_occurrences` counts the number of charging stations per postal code in a
+    GeoDataFrame.
     
-    This function groups the charging station data by postal code and counts the occurrences of each postal code.
-
-    Parameters:
-        df_lstat2 (GeoDataFrame): The input GeoDataFrame containing charging station data.
-
-    Returns:
-        DataFrame: A DataFrame with the count of charging stations per postal code, including geometry.
+    :param df_lstat2: The `df_lstat2` parameter is a GeoDataFrame that contains charging station data.
+    The function `count_plz_occurrences` takes this GeoDataFrame as input and groups the data by postal
+    code (PLZ), counting the occurrences of charging stations for each postal code. The function then
+    returns a
+    :return: The function `count_plz_occurrences` returns a DataFrame with the count of charging
+    stations per postal code, including the geometry information.
     """
 
     # Group by PLZ and count occurrences, keeping geometry
@@ -151,19 +160,21 @@ def count_plz_occurrences(df_lstat2):
 # -----------------------------------------------------------------------------
 @ht.timer
 def preprop_resid(dfr, dfg, pdict):
-    """ Preprocesses the resident data from the plz_einwohner.csv file.
+    """
+    The function preprop_resid preprocesses resident data by filtering for postal codes in Berlin within
+    a specified range and returns a GeoDataFrame with geometries.
     
-    This function filters data to include only postal codes in Berlin and within the specified range.
-    returns a GeoDataFrame containing resident data with geometry.
-
-    Parameters:
-        dfr (DataFrame): DataFrame containing resident data.
-        dfg (GeoDataFrame): Geospatial dataframe containing the postal code geometries.
-        pdict (dict): Dictionary containing mappings and other parameters, including geocode information.
-
-    Returns:
-        GeoDataFrame: A GeoDataFrame with resident data, including geometries.
-        """
+    :param dfr: The `dfr` parameter is a DataFrame containing resident data. It likely includes
+    information such as postal codes, number of residents, latitude, and longitude for different
+    locations
+    :param dfg: The `dfg` parameter in the `preprop_resid` function is a GeoDataFrame containing the
+    postal code geometries. It likely includes information about the shapes and locations of postal code
+    areas in a geographic region, such as Berlin in this case. This data is used to spatially join the
+    :param pdict: The `pdict` parameter in the `preprop_resid` function is a dictionary containing
+    mappings and other parameters, including geocode information. It likely holds various settings,
+    configurations, or data needed for processing the resident data
+    :return: A GeoDataFrame with resident data, including geometries, is being returned.
+    """
     
     dframe                  = dfr.copy()
     df_geo                  = dfg.copy()    
@@ -191,18 +202,15 @@ def preprop_resid(dfr, dfg, pdict):
 # -----------------------------------------------------------------------------
 @ht.timer
 def make_streamlit_electric_Charging_resid(dfr1, dfr2):
-    """Creates a Streamlit app to visualize heatmaps of electric charging stations and resident distribution.
-
-    This function uses Folium to display a map with color-coded polygons representing the number of residents
-    or the number of electric charging stations per postal code. Users can toggle between layers to view either
-    residents or charging stations.
-
-    Parameters:
-        dfr1 (GeoDataFrame): A GeoDataFrame containing the charging station data with geometries.
-        dfr2 (GeoDataFrame): A GeoDataFrame containing the resident data with geometries.
-
-    Returns:
-        None (Displays a Streamlit app with the map visualization).
+    """
+    This function is designed to create a Streamlit app for electric vehicle charging at residential
+    locations using two input dataframes.
+    
+    :param dfr1: It seems like you were about to ask for an explanation of the parameters `dfr1` and
+    `dfr2`. Could you please provide more context or finish your question so I can assist you better?
+    :param dfr2: It seems like your message got cut off. Could you please provide more information about
+    the parameters and what you would like to achieve with the function
+    `make_streamlit_electric_Charging_resid(dfr1, dfr2)`?
     """
     
     dframe1 = dfr1.copy()

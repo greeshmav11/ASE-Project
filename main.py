@@ -17,7 +17,7 @@ from config                          import pdict
 # -----------------------------------------------------------------------------
 @ht.timer
 def main():
-    """Main: Generation of Streamlit App for visualizing electric charging stations & residents in Berlin
+    """Generation of Streamlit App for visualizing electric charging stations & residents in Berlin
     
     The function performs the following steps:
     
