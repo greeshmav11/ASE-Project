@@ -50,6 +50,6 @@ It is interesting to notice that the mismatch between the two is not only, as on
 
 # Output
 
-![Residents Heatmap](assets\residents_map.png)
+![Residents Heatmap](assets/residents_map.png)
 
-![Charging stations Heatmap](assets\stations_map.png)
+![Charging stations Heatmap](assets/stations_map.png)
