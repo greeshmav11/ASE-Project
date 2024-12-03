@@ -47,3 +47,9 @@ comparing the two visualizations, it is obvious that there are a number of ineff
 - Many outer suburbs with moderate population density have very few charging stations, which might deter EV adoption for residents in these neighborhoods.
 
 It is interesting to notice that the mismatch between the two is not only, as one would expect, an insufficient number of charging spots in high population areas, but also that in some regions there are too many charging spots in relation to the residents. This shows an inefficient planning, so the logical conclusion would be to better allocate resources for futre charging spots installations.
+
+# Output
+
+![Residents Heatmap](assets\residents_map.png)
+
+![Charging stations Heatmap](assets\stations_map.png)
